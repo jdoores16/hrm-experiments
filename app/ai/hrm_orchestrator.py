@@ -81,18 +81,47 @@ class HRMOrchestrator:
     
     def _load_hrm_models(self):
         """Load HRM models for different engineering tasks"""
-        # TODO: Load actual HRM checkpoints
         logger.info("Loading HRM reasoning models...")
         
-        # Placeholder for HRM model loading
-        # In production, load from hrm_checkpoints/
-        self.hrm_models = {
-            TaskType.CIRCUIT_ROUTING: None,  # Will load circuit_routing.pt
-            TaskType.PANEL_OPTIMIZATION: None,  # Will load panel_optimization.pt
-            TaskType.NEC_VALIDATION: None,  # Will load nec_reasoning.pt
-        }
+        from app.ai.hrm_model_loader import get_model_loader
         
-        logger.info(f"HRM models loaded: {list(self.hrm_models.keys())}")
+        # Initialize model loader
+        loader = get_model_loader(checkpoint_dir="hrm_checkpoints")
+        
+        # Attempt to load all available models
+        loaded = loader.load_all_available()
+        
+        # Map loaded models to task types
+        self.hrm_models = {}
+        
+        # Panel optimization
+        if "panel_optimization" in loaded:
+            self.hrm_models[TaskType.PANEL_OPTIMIZATION] = loaded["panel_optimization"]
+            logger.info("✓ Panel optimization model loaded")
+        else:
+            self.hrm_models[TaskType.PANEL_OPTIMIZATION] = None
+            logger.warning("Panel optimization model not found")
+        
+        # Circuit routing
+        if "circuit_routing" in loaded:
+            self.hrm_models[TaskType.CIRCUIT_ROUTING] = loaded["circuit_routing"]
+            logger.info("✓ Circuit routing model loaded")
+        else:
+            self.hrm_models[TaskType.CIRCUIT_ROUTING] = None
+            logger.warning("Circuit routing model not found")
+        
+        # NEC validation
+        if "nec_validation" in loaded:
+            self.hrm_models[TaskType.NEC_VALIDATION] = loaded["nec_validation"]
+            logger.info("✓ NEC validation model loaded")
+        else:
+            self.hrm_models[TaskType.NEC_VALIDATION] = None
+            logger.warning("NEC validation model not found")
+        
+        # Store loader for future use
+        self.model_loader = loader
+        
+        logger.info(f"HRM models ready: {sum(1 for m in self.hrm_models.values() if m is not None)}/{len(self.hrm_models)}")
     
     def _check_llm_availability(self):
         """Check if LLM (OpenAI) is available for language tasks"""
