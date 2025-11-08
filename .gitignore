@@ -1,1 +1,28 @@
-.venv/\n__pycache__/\n*.pt\n*.safetensors\ncheckpoints/\n
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+
+# Envs & IDE
+.venv/
+.env
+.vscode/
+.idea/
+
+# Data & outputs
+data/
+outputs/
+wandb/
+logs/
+
+# Build/cache
+dist/
+build/
+*.log
+
+# Local backups
+models/layers.py.bak
+models/sparse_embedding.py.bak
+models/sparse_embedding.py.broken

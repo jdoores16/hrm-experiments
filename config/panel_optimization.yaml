@@ -1,0 +1,55 @@
+# Panel Optimization Training Configuration
+defaults:
+  - _self_
+
+# -------------------------------------------------------------------------
+# 🔧 Custom fields
+# -------------------------------------------------------------------------
+project_name: hrm_elect_engin
+run_name: panel_optimization_v1
+dataset_path: data/panel_optimization
+# -------------------------------------------------------------------------
+
+# Architecture
+arch:
+  name: hrm.hrm_act_v1@HierarchicalReasoningModel_ACTV1
+
+  hidden_size: 256
+  num_heads: 8
+  expansion: 2.0
+
+  H_layers: 2
+  L_layers: 4
+  H_cycles: 8
+  L_cycles: 8
+
+  halt_max_steps: 8
+  halt_exploration_prob: 0.1
+
+  pos_encodings: learned
+  puzzle_emb_ndim: 256
+
+  loss:
+    name: losses@SoftmaxCrossEntropyLoss
+    loss_type: softmax_cross_entropy
+
+# Training hyperparameters
+data_path: data/panel_optimization
+epochs: 10000
+eval_interval: 1000
+
+global_batch_size: 512
+lr: 1e-4
+lr_min_ratio: 0.1
+lr_warmup_steps: 100
+
+weight_decay: 1.0
+beta1: 0.9
+beta2: 0.999
+
+puzzle_emb_lr: 1e-4
+puzzle_emb_weight_decay: 1.0
+
+# Checkpointing
+checkpoint_every_eval: true
+seed: 42

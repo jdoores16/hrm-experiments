@@ -99,3 +99,19 @@ class ACTLossHead(nn.Module):
         detached_outputs = {k: outputs[k].detach() for k in return_keys if k in outputs}
 
         return new_carry, lm_loss + 0.5 * (q_halt_loss + q_continue_loss), metrics, detached_outputs, new_carry.halted.all()
+
+# --- Added alias to expose function as a class for Hydra loader ---
+try:
+    _softmax_ce = softmax_cross_entropy
+except NameError:
+    # some repos nest it; adjust if needed
+    from . import softmax_cross_entropy as _softmax_ce
+
+class SoftmaxCrossEntropyLoss:
+    """Thin wrapper so config can reference losses@SoftmaxCrossEntropyLoss."""
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+    def __call__(self, logits, targets, **kwargs):
+        k = dict(self.kwargs); k.update(kwargs)
+        return _softmax_ce(logits, targets, **k)
+# --- End alias ---
