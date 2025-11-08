@@ -1,134 +1,149 @@
-# HRM Experiments - Sapient Integration
+# HRM Experiments - Sapient Integration with Elect_Engin1
 
 ## Overview
-This project integrates **Sapient's HRM (Hierarchical Reasoning Model)** - a brain-inspired neural network architecture that excels at complex reasoning tasks with minimal training data.
+Integration of **Sapient's HRM (Hierarchical Reasoning Model)** with **Elect_Engin1** electrical design assistant.
 
-HRM is a revolutionary approach to AI reasoning:
-- **27 million parameters** (vs billions for LLMs)
-- **Trains on ~1,000 examples** (vs millions for LLMs)
-- **100x faster inference** than chain-of-thought reasoning
-- **No pre-training required**
-- **Outperforms large LLMs** on reasoning benchmarks
+**Architecture**: **HRM-First** - HRM is the core reasoning engine that uses LLMs like GPT-4 as language tools.
+
+## Core Concept
+- **HRM**: Core decision maker, performs all engineering reasoning
+- **LLMs (GPT-4)**: Support tools for language processing and text generation
+- **Integration**: HRM orchestrates; LLM assists with language tasks only
 
 ## Purpose
-Set up HRM architecture for integration with other applications that require advanced reasoning capabilities (puzzle solving, planning, pathfinding, abstract reasoning, etc.)
+Create an AI-powered electrical engineering system where:
+1. HRM performs multi-step technical reasoning (calculations, optimization, validation)
+2. LLM handles language tasks (parsing user intent, generating reports)
+3. Together they deliver professional-grade electrical designs
 
 ## Recent Changes
-- **2025-11-08**: Initial setup in Replit environment
-  - Cloned Sapient HRM repository from GitHub
-  - Organized project structure (models, dataset, utils)
-  - Created integration wrapper (`hrm_wrapper.py`) for easy app integration
-  - Added usage examples (`integration_example.py`)
-  - Set up Python 3.11 environment
-  - Added comprehensive documentation
+- **2025-11-08**: Initial HRM setup
+  - Cloned Sapient HRM repository
+  - Organized models, dataset builders, utilities
+  - Created integration wrapper (`hrm_wrapper.py`)
+  
+- **2025-11-08**: Elect_Engin1 integration
+  - Cloned Elect_Engin1 app from GitHub
+  - Created HRM orchestrator (`app/ai/hrm_orchestrator.py`)
+  - Defined HRM-first architecture (see ARCHITECTURE.md)
+  - Set up task types for electrical engineering
 
 ## Project Architecture
 
-### Core Components
-- **models/**: HRM neural network architecture
-  - `hrm/`: Core hierarchical reasoning implementation
-  - `layers.py`: Neural network building blocks
-  - `losses.py`: Training loss functions
-  - `sparse_embedding.py`: Efficient embeddings
+### HRM-First Decision Flow
+```
+User Input → HRM Plans → HRM Executes → HRM Validates → Solution
+                             ├─→ LLM (language)
+                             ├─→ HRM (reasoning)
+                             └─→ Rules (NEC)
+```
 
-- **dataset/**: Dataset builders for training
-  - `build_sudoku_dataset.py`: Sudoku puzzle generator
-  - `build_maze_dataset.py`: Maze generation
-  - `build_arc_dataset.py`: ARC-AGI benchmark
+### Engineering Tasks HRM Handles
+1. **Circuit Routing**: Optimal pathfinding through floor plans
+2. **Panel Optimization**: Phase balance and load distribution
+3. **NEC Validation**: Multi-step code compliance checking
+4. **Load Calculations**: Complex demand factor analysis
+5. **Design Review**: Technical validation and optimization
 
-- **utils/**: Helper utilities
-- **config/**: Configuration files
+### When HRM Uses LLM
+- Parse user intent from natural language
+- Extract parameters from text/documents
+- Generate human-readable reports
+- Explain technical decisions in plain English
 
-### Integration Files
-- **hrm_wrapper.py**: Simplified API for integrating HRM with apps
-  - `HRMInference`: Load and run HRM models
-  - `HRMAdapter`: Convert between app data and HRM format
-  - Pre-trained checkpoint downloader
-
-- **integration_example.py**: Complete usage examples
-  - Sudoku solver example
-  - Custom task training
-  - API integration
-  - Batch processing
-
-### Training & Evaluation
-- **pretrain.py**: Training script for custom tasks
-- **evaluate.py**: Model evaluation
-- **puzzle_dataset.py**: Dataset loader
-- **requirements.txt**: Python dependencies
+### What HRM Does Alone
+- All technical calculations
+- All engineering decisions
+- All code validation
+- All optimization problems
+- All pathfinding/routing
 
 ## Technology Stack
-- **Python 3.11**
-- **PyTorch** (deep learning framework)
-- **CUDA** (GPU acceleration)
-- **FlashAttention** (efficient attention mechanism)
-- **Weights & Biases** (experiment tracking)
-- **HuggingFace Hub** (pre-trained models)
+- **HRM**: 27M parameter reasoning model (PyTorch)
+- **Elect_Engin1**: FastAPI + OpenAI + ezdxf (CAD)
+- **Integration**: Python orchestrator layer
 
-## Dependencies
-Key packages:
-- torch (PyTorch)
-- adam-atan2 (optimizer)
-- einops (tensor operations)
-- wandb (experiment tracking)
-- huggingface_hub (model downloads)
-- hydra-core (configuration)
+## File Structure
+```
+.
+├── app/                        # Elect_Engin1 application
+│   ├── ai/
+│   │   ├── hrm_orchestrator.py # NEW: HRM core orchestrator
+│   │   ├── llm.py             # Existing: LLM support tool
+│   │   └── gpt_preflight.py   # Will be enhanced with HRM
+│   ├── cad/                   # CAD generation (will use HRM routing)
+│   ├── schemas/               # Panel IR, models
+│   └── main.py                # FastAPI routes
+├── models/                     # HRM neural network
+├── dataset/                    # HRM training data builders
+├── hrm_wrapper.py             # HRM inference wrapper
+├── ARCHITECTURE.md            # HRM-first design
+└── INTEGRATION_PLAN.md        # Implementation roadmap
+```
 
-## Available Pre-trained Models
-1. **Sudoku Extreme**: Solves expert-level Sudoku (55% accuracy)
-2. **Maze 30x30**: Optimal pathfinding in complex mazes (74.5% success)
-3. **ARC-AGI-2**: Abstract reasoning benchmark (beats GPT-4, Claude)
+## Key Features
 
-## Integration Strategy
+### HRM Capabilities (27M parameters)
+- Trains on ~1,000 examples (vs millions for LLMs)
+- 100x faster inference than chain-of-thought
+- Proven: 55% Sudoku-Extreme, 74.5% Maze-30x30
+- No pre-training required
 
-### To integrate HRM with another app:
-1. **Customize `hrm_wrapper.py`**
-   - Implement `prepare_input()` - convert your data to HRM tensors
-   - Implement `process_output()` - convert HRM results to your format
+### Elect_Engin1 Capabilities
+- CAD generation (one-line, power, lighting)
+- Panel schedule creation with NEC validation
+- OCR for panel photos → Excel
+- AI technical review (PE-level)
+- Voice/text interface
 
-2. **Load a model**
-   - Option A: Download pre-trained checkpoint
-   - Option B: Train on your custom reasoning task
+### Integration Benefits
+- **Better reasoning**: Multi-step technical analysis
+- **Faster**: HRM 100x faster than LLM reasoning
+- **Cheaper**: Smaller model, fewer API calls
+- **More reliable**: Deterministic engineering
+- **Offline capable**: Run HRM locally
 
-3. **Use the adapter**
-   ```python
-   from hrm_wrapper import HRMInference, HRMAdapter
-   
-   model = HRMInference('checkpoint.pt')
-   adapter = HRMAdapter(model)
-   
-   result = adapter.batch_predict(your_data)
-   ```
+## Implementation Plan
 
-## Use Cases
-Perfect for applications requiring:
-- Complex puzzle solving
-- Planning and pathfinding
-- Abstract reasoning
-- Optimization problems
-- Decision support systems
-- Game AI
-- Educational tools
+### Phase 1: Core Orchestrator ✓
+- [x] Create HRMOrchestrator class
+- [x] Define task types and LLM request types
+- [x] Set up HRM-LLM interaction pattern
+- [ ] Integrate with Elect_Engin1 routes
 
-## Performance Characteristics
-- **Model Size**: 27M parameters (~108 MB)
-- **Training Time**: 2-24 hours (depending on task)
-- **Inference Speed**: 100x faster than LLM CoT
-- **Data Requirements**: ~1,000 training examples
-- **Edge Deployment**: Yes (small model size)
+### Phase 2: Panel Optimization (Next)
+- [ ] Train HRM on panel schedule datasets
+- [ ] Replace GPT planning with HRM reasoning
+- [ ] Benchmark phase balance quality
+
+### Phase 3: Circuit Routing
+- [ ] Train HRM on floor plan datasets
+- [ ] Integrate pathfinding with CAD
+- [ ] Measure routing efficiency
+
+### Phase 4: NEC Validation
+- [ ] Train HRM on code scenarios
+- [ ] Multi-step rule chaining
+- [ ] Enhanced technical review
+
+## Training Data Needed
+1. **Panel Schedules**: 1,000 examples with optimal assignments
+2. **Floor Plans**: 1,000 examples with optimal routing
+3. **NEC Scenarios**: 1,000 examples with violations/corrections
 
 ## Resources
-- **Official Repo**: https://github.com/sapientinc/HRM
-- **Paper**: https://arxiv.org/abs/2506.21734
-- **Company**: https://sapient.inc
-- **Discord**: https://discord.gg/sapient
-
-## Next Steps
-User should specify:
-1. What their other app does
-2. What reasoning tasks HRM should handle
-3. Whether to use pre-trained models or train custom models
-4. Data format and integration requirements
+- **HRM Official**: https://github.com/sapientinc/HRM
+- **HRM Paper**: https://arxiv.org/abs/2506.21734
+- **Elect_Engin1**: https://github.com/jdoores16/Elect_Enginv1
 
 ## User Preferences
-None specified yet.
+- **Architecture**: HRM-first (HRM as core decision maker, LLM as language tool)
+- **Focus**: Engineering reasoning quality over language fluency
+- **Integration**: Keep Elect_Engin1 functional, enhance with HRM capabilities
+
+## Next Steps
+1. Finish HRM orchestrator integration with FastAPI routes
+2. Create training datasets for panel optimization
+3. Train first HRM model (panel optimization)
+4. Benchmark against current GPT-based approach
+5. Expand to circuit routing and NEC validation
